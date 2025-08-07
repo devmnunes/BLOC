@@ -1,38 +1,47 @@
 import 'package:flutter/material.dart';
 
+import 'package:flutter_application_1/bloc/contador_bloc.dart';
+
 void main() {
-  runApp(
-    MaterialApp(
-      home: MyApp(),
-      ),
-    );
+  runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
   @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  ContadorBloc bloc = ContadorBloc();
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('Aula Bloc')),
-      body: SizedBox.expand(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text('Id Usuario: UserId', style: TextStyle(
-              fontSize: 20,
-            ),
-          ), 
-            Text('Nome: userName', style: TextStyle(
-              fontSize: 20,
+
+    return MaterialApp(
+      home: StreamBuilder<int>(
+        stream: bloc.valorStream,
+        builder: (context, snapshot) => Scaffold(
+          appBar: AppBar(
+            backgroundColor: Colors.deepPurple,
+            centerTitle: true,
+            title: Text('BLoC State Management'),
+          ),
+
+          body: GestureDetector(
+            onTap: () {
+              bloc.valorSink.add((snapshot.data ?? 0) + 1);
+            },
+
+            child: Center(
+              child: Text(
+                snapshot.data.toString(),
+                textDirection: TextDirection.ltr,
+                style: TextStyle(fontSize: 50),
               ),
             ),
-            ElevatedButton(onPressed: () {
-
-            }, 
-            child: Text('Mudar valor'),
-            ),
-          ],
+          ),
         ),
       ),
     );
