@@ -1,49 +1,29 @@
+
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/pages/bloc/home_bloc.dart';
+import 'package:flutter_application_1/pages/bloc/home_event.dart';
+import 'package:flutter_application_1/pages/bloc/home_state.dart';
+import 'package:flutter_application_1/pages/home_page.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:flutter_application_1/bloc/contador_bloc.dart';
-
-void main() {
+void main () {
   runApp(MyApp());
 }
 
-class MyApp extends StatefulWidget {
+class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  ContadorBloc bloc = ContadorBloc();
-
-  @override
   Widget build(BuildContext context) {
-
     return MaterialApp(
-      home: StreamBuilder<int>(
-        stream: bloc.valorStream,
-        builder: (context, snapshot) => Scaffold(
-          appBar: AppBar(
-            backgroundColor: Colors.deepPurple,
-            centerTitle: true,
-            title: Text('BLoC State Management'),
-          ),
-
-          body: GestureDetector(
-            onTap: () {
-              bloc.valorSink.add((snapshot.data ?? 0) + 1);
-            },
-
-            child: Center(
-              child: Text(
-                snapshot.data.toString(),
-                textDirection: TextDirection.ltr,
-                style: TextStyle(fontSize: 50),
-              ),
-            ),
-          ),
-        ),
+      title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        primaryColor: Colors.blue,
       ),
+      home: BlocProvider<HomeBloc(
+        builder: (BuildContext context) => HomeBloc(HomeLoadingState())..add(HomeFetchList()),
+      child: HomePage()),
     );
   }
 }
