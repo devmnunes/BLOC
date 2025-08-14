@@ -1,4 +1,5 @@
 import 'package:flutter_application_1/client.dart';
+part of 'client_bloc.dart';
 
 abstract class ClientState {
   List<Client> clients;

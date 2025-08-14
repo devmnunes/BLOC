@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/blocs/client_bloc.dart';
 import 'package:flutter_application_1/blocs/client_events.dart';
+import 'package:flutter_application_1/blocs/client_state.dart';
+import 'package:flutter_application_1/client.dart';
 
 class ClientPage extends StatefulWidget {
   const ClientPage({super.key});
@@ -21,9 +23,9 @@ class _ClientPageState extends State<ClientPage> {
 
   @override
   void dispose() {
-    
+    bloc.inputClient.close();
+    super.dispose();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -31,10 +33,42 @@ class _ClientPageState extends State<ClientPage> {
       appBar: AppBar(
         title: Text('Clientes'),
         actions: [
-          IconButton(onPressed: () {
-
-          }, icon: Icon(Icons.person_add))
+          IconButton(
+            onPressed: () {
+              bloc.inputClient.add(
+                AddClientEvent(client: Client(nome: 'Miguel')),
+              );
+            },
+            icon: Icon(Icons.person_add),
+          ),
         ],
+      ),
+      body: StreamBuilder<ClientState>(
+        stream: bloc.stream,
+        builder: (context, snapshot) {
+          final clientList = snapshot.data?.clients ?? [];
+          return ListView.separated(
+            itemCount: clientList.length,
+            itemBuilder: (context, index) => ListTile(
+              leading: CircleAvatar(
+                child: ClipRRect(
+                  child: Text(clientList[index].nome.substring(0, 1)),
+                  borderRadius: BorderRadiusGeometry.circular(50),
+                ),
+              ),
+              title: Text(clientList[index].nome),
+              trailing: IconButton(
+                onPressed: () {
+                  bloc.inputClient.add(
+                    RemoveClientEvent(client: clientList[index]),
+                  );
+                },
+                icon: Icon(Icons.remove),
+              ),
+            ),
+            separatorBuilder: (_, __) => Divider(),
+          );
+        },
       ),
     );
   }
