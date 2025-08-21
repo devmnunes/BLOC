@@ -18,12 +18,12 @@ class _ClientPageState extends State<ClientPage> {
   void initState() {
     super.initState();
     bloc = ClientBloc();
-    bloc.inputClient.add(LoadClientEvent());
+    bloc.add(LoadClientEvent());
   }
 
   @override
   void dispose() {
-    bloc.inputClient.close();
+    bloc.close();
     super.dispose();
   }
 
@@ -35,7 +35,7 @@ class _ClientPageState extends State<ClientPage> {
         actions: [
           IconButton(
             onPressed: () {
-              bloc.inputClient.add(
+              bloc.add(
                 AddClientEvent(client: Client(nome: 'Miguel')),
               );
             },
@@ -59,7 +59,7 @@ class _ClientPageState extends State<ClientPage> {
               title: Text(clientList[index].nome),
               trailing: IconButton(
                 onPressed: () {
-                  bloc.inputClient.add(
+                  bloc.add(
                     RemoveClientEvent(client: clientList[index]),
                   );
                 },

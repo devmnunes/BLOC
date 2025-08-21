@@ -1,6 +1,6 @@
 import 'package:flutter_application_1/client.dart';
 
-class ClientRepository {
+class ClientsRepository {
   final List<Client> _clients = [];
 
   List<Client> loadClients() {
